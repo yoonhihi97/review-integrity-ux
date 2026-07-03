@@ -184,6 +184,7 @@ export default function WriteReview() {
           </div>
           <div className="border border-border-gray rounded-lg overflow-hidden">
             <textarea
+              style={{ fontSize: 16 }}
               className="w-full h-24 p-3 text-body-md text-text-secondary border-none resize-none focus:ring-0 placeholder:text-outline-variant"
               placeholder="다른 고객님에게 도움이 되도록 상품에 대한 솔직한 평가를 남겨주세요. (상품 품질과 관계 없는 배송, 포장, 질문 응대, 상품 가격 등은 판매자 서비스 평가에 남겨주세요.)"
               value={productText}
@@ -274,6 +275,7 @@ export default function WriteReview() {
           </p>
           <div className="border border-border-gray rounded-lg overflow-hidden mb-section-gap">
             <textarea
+              style={{ fontSize: 16 }}
               className="w-full h-24 p-3 text-body-md text-text-secondary border-none resize-none focus:ring-0 placeholder:text-outline-variant"
               placeholder={
                 '판매자의 어떤 점이 마음에 드셨나요?\n(상품 품질이 아닌 배송, 포장, 질문 응대, 상품 가격 등 판매자에 대한 만족도를 평가해주세요.)'

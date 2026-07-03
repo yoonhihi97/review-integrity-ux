@@ -39,6 +39,14 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* iOS Safari auto-zooms into any input/textarea/select whose computed
+   font-size is under 16px on focus. Keeping them at 16px+ stops that. */
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+
 input[type="radio"].radio-primary {
   appearance: none;
   width: 20px;

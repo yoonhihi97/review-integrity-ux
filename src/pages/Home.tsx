@@ -68,7 +68,7 @@ export default function Home() {
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="쿠팡에서 검색하세요!"
-            className="block w-full pl-10 pr-3 py-2 border-2 border-text-primary rounded-full bg-surface-container-lowest text-text-primary text-sm focus:outline-none"
+            className="block w-full pl-10 pr-3 py-2 border-2 border-text-primary rounded-full bg-surface-container-lowest text-text-primary text-base focus:outline-none"
           />
         </form>
       </header>
