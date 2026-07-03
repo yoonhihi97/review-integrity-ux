@@ -45,7 +45,7 @@ export default function WriteReview() {
   const [coverage, setCoverage] = useState<string | null>(null);
   const [productText, setProductText] = useState('');
   const [sellerSatisfied, setSellerSatisfied] = useState<'up' | 'down' | null>(null);
-  const [keyword, setKeyword] = useState<string | null>(null);
+  const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
   const [sellerText, setSellerText] = useState('');
 
   const keywordOptions =
@@ -219,7 +219,7 @@ export default function WriteReview() {
             <button
               onClick={() => {
                 setSellerSatisfied('down');
-                setKeyword(null);
+                setSelectedKeywords([]);
               }}
               className={`w-14 h-14 rounded-full border flex items-center justify-center transition-all ${
                 sellerSatisfied === 'down'
@@ -232,7 +232,7 @@ export default function WriteReview() {
             <button
               onClick={() => {
                 setSellerSatisfied('up');
-                setKeyword(null);
+                setSelectedKeywords([]);
               }}
               className={`w-14 h-14 rounded-full border flex items-center justify-center transition-all ${
                 sellerSatisfied === 'up'
@@ -257,9 +257,13 @@ export default function WriteReview() {
                 {keywordOptions.map((k) => (
                   <button
                     key={k}
-                    onClick={() => setKeyword(k)}
+                    onClick={() =>
+                      setSelectedKeywords((prev) =>
+                        prev.includes(k) ? prev.filter((item) => item !== k) : [...prev, k],
+                      )
+                    }
                     className={`px-2 py-2 rounded-full border text-label-sm text-center transition-colors ${
-                      keyword === k
+                      selectedKeywords.includes(k)
                         ? 'bg-primary border-primary text-white'
                         : 'bg-white border-border-gray text-text-primary'
                     }`}
