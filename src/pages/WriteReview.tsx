@@ -40,9 +40,9 @@ const NEGATIVE_KEYWORDS = [
 export default function WriteReview() {
   const navigate = useNavigate();
   const [productRating, setProductRating] = useState(0);
-  const [scent, setScent] = useState('good');
-  const [colorTone, setColorTone] = useState('asExpected');
-  const [coverage, setCoverage] = useState('just');
+  const [scent, setScent] = useState<string | null>(null);
+  const [colorTone, setColorTone] = useState<string | null>(null);
+  const [coverage, setCoverage] = useState<string | null>(null);
   const [productText, setProductText] = useState('');
   const [sellerSatisfied, setSellerSatisfied] = useState<'up' | 'down' | null>(null);
   const [keyword, setKeyword] = useState<string | null>(null);
