@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Icon from "../components/Icon";
 import StarRating from "../components/StarRating";
@@ -35,13 +35,179 @@ const RATING_FILTER_ROWS = [
   { key: "1", label: "1점 이상", count: 10, stars: 1 },
 ];
 
-const PERIODS = ["최근 1개월", "3개월", "6개월", "1년", "전체"];
+const PERIODS = ["전체", "최근 1개월", "3개월", "6개월", "1년"];
+const PERIOD_DAYS: Record<string, number | null> = {
+  "전체": null,
+  "최근 1개월": 30,
+  "3개월": 90,
+  "6개월": 180,
+  "1년": 365,
+};
 const OPTIONS = ["전체 옵션", "01 베어 애프리콧 (124)", "02 겟 러브 (320)"];
 
-function FilterPanel({ onClose }: { onClose: () => void }) {
-  const [ratingFilter, setRatingFilter] = useState("all");
-  const [period, setPeriod] = useState("최근 1개월");
-  const [option, setOption] = useState("전체 옵션");
+const CURRENT_SELLER_NAME = "주식회사 뉴뷰티";
+
+function daysAgo(n: number): Date {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  return d;
+}
+
+function formatDate(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}.${m}.${day}`;
+}
+
+interface Review {
+  id: string;
+  author: string;
+  rating: number;
+  date: Date;
+  sellerName: string;
+  isCurrentSeller: boolean;
+  optionKey: "01" | "02";
+  hasMedia: boolean;
+  mediaIdx: number[];
+  title: string;
+  body: string;
+}
+
+const REVIEWS: Review[] = [
+  {
+    id: "r1",
+    author: "스라소닝",
+    rating: 5,
+    date: daysAgo(3),
+    sellerName: CURRENT_SELLER_NAME,
+    isCurrentSeller: true,
+    optionKey: "02",
+    hasMedia: true,
+    mediaIdx: [0, 1, 2],
+    title: "맑고 생기 있는 컬러",
+    body: "평소 자연스럽고 맑게 발색되는 틴트를 좋아해서 겟 러브를 구매했습니다. 입술에 얇고 가볍게 밀착되면서 여러 번 덧발라도 답답한 느낌이 적었고, 생기 있는 컬러 덕분에 데일리 메이크업에 손이 자주 갔습니다.",
+  },
+  {
+    id: "r2",
+    author: "민트초코라떼",
+    rating: 4,
+    date: daysAgo(20),
+    sellerName: "굿퀄리티샵",
+    isCurrentSeller: false,
+    optionKey: "01",
+    hasMedia: false,
+    mediaIdx: [],
+    title: "발림성이 좋아요",
+    body: "베어 애프리콧 컬러가 생각보다 자연스러워서 만족스러웠습니다. 다만 지속력은 다른 제품보다 살짝 아쉬운 편이라 중간에 한 번 덧발라야 했어요.",
+  },
+  {
+    id: "r3",
+    author: "새벽별",
+    rating: 5,
+    date: daysAgo(45),
+    sellerName: CURRENT_SELLER_NAME,
+    isCurrentSeller: true,
+    optionKey: "02",
+    hasMedia: true,
+    mediaIdx: [1, 2],
+    title: "재구매 의사 100%",
+    body: "겟 러브 컬러는 얼굴에 자연스럽게 생기를 더해주는 톤이라 데일리 메이크업과 잘 어울렸습니다. 한 번 바르면 은은하게 발색되고, 여러 번 덧바르면 조금 더 선명한 컬러를 연출할 수 있었어요.",
+  },
+  {
+    id: "r4",
+    author: "코스모스언니",
+    rating: 3,
+    date: daysAgo(75),
+    sellerName: "데일리뷰티",
+    isCurrentSeller: false,
+    optionKey: "01",
+    hasMedia: false,
+    mediaIdx: [],
+    title: "무난한 발색이에요",
+    body: "특별히 튀지 않는 무난한 색감이라 회사에서 사용하기 좋았습니다. 다만 포장 상태가 조금 아쉬웠어요.",
+  },
+  {
+    id: "r5",
+    author: "하늘하늘구름",
+    rating: 4,
+    date: daysAgo(150),
+    sellerName: CURRENT_SELLER_NAME,
+    isCurrentSeller: true,
+    optionKey: "02",
+    hasMedia: true,
+    mediaIdx: [0],
+    title: "지속력 괜찮아요",
+    body: "식사 후에도 색이 크게 빠지지 않아서 만족스러웠습니다. 향도 은은해서 부담스럽지 않았어요.",
+  },
+  {
+    id: "r6",
+    author: "딸기라떼우유",
+    rating: 2,
+    date: daysAgo(280),
+    sellerName: "굿퀄리티샵",
+    isCurrentSeller: false,
+    optionKey: "01",
+    hasMedia: false,
+    mediaIdx: [],
+    title: "생각보다 건조해요",
+    body: "발림성은 나쁘지 않은데 시간이 지나면 입술이 건조해지는 느낌이 있었습니다. 각질이 있는 날엔 더 도드라져서 아쉬웠어요.",
+  },
+  {
+    id: "r7",
+    author: "초코민트향기",
+    rating: 5,
+    date: daysAgo(400),
+    sellerName: CURRENT_SELLER_NAME,
+    isCurrentSeller: true,
+    optionKey: "02",
+    hasMedia: false,
+    mediaIdx: [],
+    title: "인생틴트 등극",
+    body: "여러 틴트를 써봤지만 발색력과 지속력 밸런스가 가장 좋았습니다. 재구매해서 계속 쓰고 있어요.",
+  },
+  {
+    id: "r8",
+    author: "봄날의곰돌이",
+    rating: 1,
+    date: daysAgo(500),
+    sellerName: "데일리뷰티",
+    isCurrentSeller: false,
+    optionKey: "01",
+    hasMedia: true,
+    mediaIdx: [2, 3],
+    title: "포장이 아쉬웠어요",
+    body: "제품 자체는 무난했지만 배송 중 포장이 눌려서 도착했습니다. 판매자 응대도 다소 늦은 편이었어요.",
+  },
+];
+
+const TOTAL_REVIEW_COUNT = REVIEWS.length;
+const CURRENT_SELLER_REVIEW_COUNT = REVIEWS.filter((r) => r.isCurrentSeller).length;
+
+function optionKeyFromLabel(label: string): "01" | "02" | null {
+  if (label.startsWith("01")) return "01";
+  if (label.startsWith("02")) return "02";
+  return null;
+}
+
+interface AppliedFilters {
+  rating: string;
+  period: string;
+  option: string;
+}
+
+function FilterPanel({
+  onClose,
+  onApply,
+  initial,
+}: {
+  onClose: () => void;
+  onApply: (filters: AppliedFilters) => void;
+  initial: AppliedFilters;
+}) {
+  const [ratingFilter, setRatingFilter] = useState(initial.rating);
+  const [period, setPeriod] = useState(initial.period);
+  const [option, setOption] = useState(initial.option);
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/40" onClick={onClose}>
@@ -145,7 +311,10 @@ function FilterPanel({ onClose }: { onClose: () => void }) {
 
         <div className="absolute bottom-0 left-0 w-full bg-white border-t border-border-gray p-3">
           <button
-            onClick={onClose}
+            onClick={() => {
+              onApply({ rating: ratingFilter, period, option });
+              onClose();
+            }}
             className="w-full h-12 bg-primary text-white text-body-lg-bold rounded-lg flex items-center justify-center"
           >
             적용하기
@@ -163,6 +332,41 @@ export default function ReviewExplore() {
   const [sortBy, setSortBy] = useState<"best" | "latest">("best");
   const [mediaOnly, setMediaOnly] = useState(true);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [appliedFilters, setAppliedFilters] = useState<AppliedFilters>({
+    rating: "all",
+    period: "전체",
+    option: "전체 옵션",
+  });
+
+  const visibleReviews = useMemo(() => {
+    const optionKey = optionKeyFromLabel(appliedFilters.option);
+    const periodDays = PERIOD_DAYS[appliedFilters.period];
+    const now = Date.now();
+
+    const filtered = REVIEWS.filter((r) => {
+      if (sellerOnly && !r.isCurrentSeller) return false;
+      if (mediaOnly && !r.hasMedia) return false;
+      if (appliedFilters.rating !== "all") {
+        const threshold = Number(appliedFilters.rating);
+        const matches = appliedFilters.rating === "5" ? r.rating === 5 : r.rating >= threshold;
+        if (!matches) return false;
+      }
+      if (optionKey && r.optionKey !== optionKey) return false;
+      if (periodDays !== null) {
+        const ageDays = (now - r.date.getTime()) / 86_400_000;
+        if (ageDays > periodDays) return false;
+      }
+      return true;
+    });
+
+    filtered.sort((a, b) => {
+      if (sortBy === "latest") return b.date.getTime() - a.date.getTime();
+      if (b.rating !== a.rating) return b.rating - a.rating;
+      return b.date.getTime() - a.date.getTime();
+    });
+
+    return filtered;
+  }, [sellerOnly, mediaOnly, sortBy, appliedFilters]);
 
   return (
     <div className="bg-surface text-on-surface antialiased pb-24">
@@ -209,7 +413,9 @@ export default function ReviewExplore() {
             </button>
           </div>
           <div className="text-body-md mb-4 font-body-md-bold text-primary">
-            현재 판매자 리뷰 128개 (전체 1,240개 중)
+            {sellerOnly
+              ? `현재 판매자 리뷰 ${CURRENT_SELLER_REVIEW_COUNT}개 (전체 ${TOTAL_REVIEW_COUNT}개 중)`
+              : `전체 판매자 리뷰 ${TOTAL_REVIEW_COUNT}개`}
           </div>
 
           <div className="mb-5 space-y-1">
@@ -345,65 +551,59 @@ export default function ReviewExplore() {
         </section>
 
         <section className="bg-surface-container-lowest">
-          <article className="p-container-margin border-b border-border-gray">
-            <div className="flex items-start mb-3">
-              <div className="w-10 h-10 rounded-full bg-outline-variant flex items-center justify-center text-white mr-3 shrink-0">
-                <Icon name="person" />
-              </div>
-              <div>
-                <div className="text-body-md-bold text-text-primary">스라소닝</div>
-                <div className="flex items-center text-xs text-text-secondary mt-0.5">
-                  <StarRating rating={5} size={14} className="mr-1 scale-75 origin-left" />
-                  2026.07.01
-                </div>
-                {!sellerOnly && (
-                  <div className="mt-1 inline-block bg-surface-variant border border-border-gray text-on-surface-variant text-xs px-2 py-0.5 rounded">
-                    판매자: 주식회사 뉴뷰티
-                  </div>
-                )}
-              </div>
+          {visibleReviews.length === 0 && (
+            <div className="p-container-margin py-16 text-center text-text-secondary text-body-md">
+              조건에 맞는 리뷰가 없습니다.
             </div>
-            <button
-              className="text-primary text-sm font-medium mb-3 hover:underline"
-              onClick={() => navigate(`/product/${id ?? "tooc-lip-tint"}`)}
-            >
-              투크 윗아웃 미러 립 틴트, 02 겟 러브, 1개
-            </button>
-
-            <div className="flex gap-1 overflow-x-auto snap-x pb-2 mb-3 scrollbar-hide">
-              {MEDIA_THUMBS.slice(0, 3).map((src, i) => (
-                <div key={src} className="w-24 h-24 shrink-0 snap-center relative bg-gray-200">
-                  <img className="w-full h-full object-cover" src={src} alt="리뷰 사진" />
-                  {i === 0 && (
-                    <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white text-label-xs">
-                      <Icon name="play_arrow" filled className="mb-1 text-lg" />
-                      00:02
+          )}
+          {visibleReviews.map((review) => (
+            <article key={review.id} className="p-container-margin border-b border-border-gray">
+              <div className="flex items-start mb-3">
+                <div className="w-10 h-10 rounded-full bg-outline-variant flex items-center justify-center text-white mr-3 shrink-0">
+                  <Icon name="person" />
+                </div>
+                <div>
+                  <div className="text-body-md-bold text-text-primary">{review.author}</div>
+                  <div className="flex items-center text-xs text-text-secondary mt-0.5">
+                    <StarRating rating={review.rating} size={14} className="mr-1 scale-75 origin-left" />
+                    {formatDate(review.date)}
+                  </div>
+                  {!sellerOnly && (
+                    <div className="mt-1 inline-block bg-surface-variant border border-border-gray text-on-surface-variant text-xs px-2 py-0.5 rounded">
+                      판매자: {review.sellerName}
                     </div>
                   )}
                 </div>
-              ))}
-            </div>
+              </div>
+              <button
+                className="text-primary text-sm font-medium mb-3 hover:underline"
+                onClick={() => navigate(`/product/${id ?? "tooc-lip-tint"}`)}
+              >
+                투크 윗아웃 미러 립 틴트, {review.optionKey === "01" ? "01 베어 애프리콧" : "02 겟 러브"}, 1개
+              </button>
 
-            <div className="text-body-md text-text-primary leading-relaxed space-y-3">
-              <p className="font-bold">맑고 생기 있는 컬러</p>
-              <p>한줄 요약: 맑고 생기 있는 컬러로 데일리 메이크업에 잘 어울리는 투크 틴트 겟 러브</p>
-              <div>
-                <p className="font-medium mb-1">✍️ 솔직한 사용 경험담</p>
-                <p>
-                  평소 자연스럽고 맑게 발색되는 틴트를 좋아해서 투크 틴트 겟 러브를 구매했습니다. 입술에 얇고 가볍게
-                  밀착되면서 여러 번 덧발라도 답답한 느낌이 적었고, 생기 있는 컬러 덕분에 데일리 메이크업에 손이 자주
-                  갔습니다. 쨍하게 튀기보다는 은은하게 분위기를 살려주는 타입이라 부담 없이 사용하기 좋았습니다.
-                </p>
+              {review.hasMedia && (
+                <div className="flex gap-1 overflow-x-auto snap-x pb-2 mb-3 scrollbar-hide">
+                  {review.mediaIdx.map((idx, i) => (
+                    <div key={idx} className="w-24 h-24 shrink-0 snap-center relative bg-gray-200">
+                      <img className="w-full h-full object-cover" src={MEDIA_THUMBS[idx]} alt="리뷰 사진" />
+                      {i === 0 && (
+                        <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white text-label-xs">
+                          <Icon name="play_arrow" filled className="mb-1 text-lg" />
+                          00:02
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="text-body-md text-text-primary leading-relaxed space-y-3">
+                <p className="font-bold">{review.title}</p>
+                <p>{review.body}</p>
               </div>
-              <div>
-                <p className="font-medium mb-1">① 맑고 화사한 컬러</p>
-                <p>
-                  겟 러브 컬러는 얼굴에 자연스럽게 생기를 더해주는 톤이라 데일리 메이크업과 잘 어울렸습니다. 한 번 바르면
-                  은은하게 발색되고, 여러 번 덧바르면 조금 더 선명한 컬러를 연출할 수 있어 활용도가 높았습니다.
-                </p>
-              </div>
-            </div>
-          </article>
+            </article>
+          ))}
         </section>
       </main>
 
@@ -419,7 +619,13 @@ export default function ReviewExplore() {
         </button>
       </div>
 
-      {filterOpen && <FilterPanel onClose={() => setFilterOpen(false)} />}
+      {filterOpen && (
+        <FilterPanel
+          onClose={() => setFilterOpen(false)}
+          onApply={setAppliedFilters}
+          initial={appliedFilters}
+        />
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../components/Icon";
 import StarRating from "../components/StarRating";
@@ -10,15 +10,19 @@ interface Product {
   originalPrice?: string;
   discount?: string;
   price: string;
+  priceValue: number;
   unitPrice?: string;
   badges?: string[];
   shipping?: { rocket?: boolean; text: string };
   rating: number;
   reviewCount: string;
-  trust?: { label: string; tone: "best" | "good" | "warn" };
+  trust: { tone: "best" | "good" | "warn"; score: number };
   img: string;
   contain?: boolean;
+  favorite?: boolean;
 }
+
+type SortKey = "trust" | "price" | "rating";
 
 const PRODUCTS: Product[] = [
   {
@@ -27,12 +31,14 @@ const PRODUCTS: Product[] = [
     originalPrice: "10,000원",
     discount: "30%",
     price: "7,000원",
+    priceValue: 7000,
     unitPrice: "(10g당 7,000원)",
     badges: ["무료배송", "무료반품"],
     shipping: { rocket: true, text: "내일(목) 새벽 도착" },
-    rating: 5,
+    rating: 4.9,
     reviewCount: "12,482",
-    trust: { label: "안심 최우수", tone: "best" },
+    trust: { tone: "best", score: 4.8 },
+    favorite: true,
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCcoT9JpvMjRGhqvrU3oC3uXLu8vdc8pSXbJCMD4N8_VI9xu6RSj7q40gusF626Wt8pT3iUwVHAJjOp3IEP-djvo3-0OtV3uWJAfRG8le1M86sHc_asSrE8cXp1dVupWJPtEyCOz2oGmfE_DdX5zW7VDkIN3dZQD-nF9s3Zy2bcjd5dNbzGcxehR3orkZRVP0l62NeNEgzwlt7itBAWPMN1KVdyc1VaYPAyW3G42a25t3GiWJsnvnmy",
   },
   {
@@ -41,20 +47,22 @@ const PRODUCTS: Product[] = [
     originalPrice: "15,000원",
     discount: "7%",
     price: "13,920원",
+    priceValue: 13920,
     shipping: { rocket: true, text: "내일(목) 도착 보장" },
     rating: 4.5,
     reviewCount: "656",
-    trust: { label: "안심 최우수", tone: "best" },
+    trust: { tone: "best", score: 4.7 },
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBTxxwRs_sHEiBbLVLmemlmofiX5f98SSQfhnJ68QkicKWZgR_L4zzXw21hTE0YUbrc-EhPR1jTgDB6kDzGRmxK2XadfDiR4vOixq85W3XJNejNA3j39wSf3jaDm8IzSk9Nr4y8AokA_x9kEmkRwncB4byPKWzyD2ShVjllVBIvZ0KHhcdc_1QuVtwAOUI34V3U_GywznTWugwocCcT5x3FCBSh8kQtYUtqfyO_7gnHxJuHrD4Sj3Dx",
   },
   {
     id: "romand-tint",
     title: "롬앤 쥬시 래스팅 틴트 베어 쥬시 시리즈, 25 베어 그레이프, 1개",
     price: "8,900원",
+    priceValue: 8900,
     shipping: { rocket: true, text: "모레(금) 도착 예정" },
-    rating: 5,
+    rating: 4.7,
     reviewCount: "35,120",
-    trust: { label: "안심 우수", tone: "good" },
+    trust: { tone: "good", score: 3.8 },
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBTxxwRs_sHEiBbLVLmemlmofiX5f98SSQfhnJ68QkicKWZgR_L4zzXw21hTE0YUbrc-EhPR1jTgDB6kDzGRmxK2XadfDiR4vOixq85W3XJNejNA3j39wSf3jaDm8IzSk9Nr4y8AokA_x9kEmkRwncB4byPKWzyD2ShVjllVBIvZ0KHhcdc_1QuVtwAOUI34V3U_GywznTWugwocCcT5x3FCBSh8kQtYUtqfyO_7gnHxJuHrD4Sj3Dx",
     contain: true,
   },
@@ -62,10 +70,11 @@ const PRODUCTS: Product[] = [
     id: "innisfree-tint",
     title: "이니스프리 비비드 코튼 잉크 틴트, 04호 활짝 핀 레드튤립, 1개",
     price: "5,400원",
+    priceValue: 5400,
     shipping: { text: "일반배송" },
     rating: 4,
     reviewCount: "2,104",
-    trust: { label: "안심 주의", tone: "warn" },
+    trust: { tone: "warn", score: 2.0 },
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCcoT9JpvMjRGhqvrU3oC3uXLu8vdc8pSXbJCMD4N8_VI9xu6RSj7q40gusF626Wt8pT3iUwVHAJjOp3IEP-djvo3-0OtV3uWJAfRG8le1M86sHc_asSrE8cXp1dVupWJPtEyCOz2oGmfE_DdX5zW7VDkIN3dZQD-nF9s3Zy2bcjd5dNbzGcxehR3orkZRVP0l62NeNEgzwlt7itBAWPMN1KVdyc1VaYPAyW3G42a25t3GiWJsnvnmy",
     contain: true,
   },
@@ -75,11 +84,49 @@ const PRODUCTS: Product[] = [
     originalPrice: "12,000원",
     discount: "20%",
     price: "9,600원",
+    priceValue: 9600,
     shipping: { rocket: true, text: "내일(목) 도착" },
     rating: 4,
     reviewCount: "8,541",
-    trust: { label: "안심 최우수", tone: "best" },
+    trust: { tone: "best", score: 4.5 },
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBTxxwRs_sHEiBbLVLmemlmofiX5f98SSQfhnJ68QkicKWZgR_L4zzXw21hTE0YUbrc-EhPR1jTgDB6kDzGRmxK2XadfDiR4vOixq85W3XJNejNA3j39wSf3jaDm8IzSk9Nr4y8AokA_x9kEmkRwncB4byPKWzyD2ShVjllVBIvZ0KHhcdc_1QuVtwAOUI34V3U_GywznTWugwocCcT5x3FCBSh8kQtYUtqfyO_7gnHxJuHrD4Sj3Dx",
+  },
+  {
+    id: "3ce-tint",
+    title: "3CE 벨벳 립 틴트, 브릭 브라운, 1개",
+    price: "4,900원",
+    priceValue: 4900,
+    shipping: { text: "일반배송" },
+    rating: 5,
+    reviewCount: "1,320",
+    trust: { tone: "warn", score: 2.0 },
+    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCcoT9JpvMjRGhqvrU3oC3uXLu8vdc8pSXbJCMD4N8_VI9xu6RSj7q40gusF626Wt8pT3iUwVHAJjOp3IEP-djvo3-0OtV3uWJAfRG8le1M86sHc_asSrE8cXp1dVupWJPtEyCOz2oGmfE_DdX5zW7VDkIN3dZQD-nF9s3Zy2bcjd5dNbzGcxehR3orkZRVP0l62NeNEgzwlt7itBAWPMN1KVdyc1VaYPAyW3G42a25t3GiWJsnvnmy",
+    contain: true,
+  },
+  {
+    id: "itsskin-tint",
+    title: "잇츠킬 워터 밤 립 틴트, 코랄 핑크, 1개",
+    originalPrice: "18,000원",
+    discount: "12%",
+    price: "15,900원",
+    priceValue: 15900,
+    shipping: { rocket: true, text: "내일(목) 도착" },
+    rating: 4.8,
+    reviewCount: "9,870",
+    trust: { tone: "best", score: 4.9 },
+    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBTxxwRs_sHEiBbLVLmemlmofiX5f98SSQfhnJ68QkicKWZgR_L4zzXw21hTE0YUbrc-EhPR1jTgDB6kDzGRmxK2XadfDiR4vOixq85W3XJNejNA3j39wSf3jaDm8IzSk9Nr4y8AokA_x9kEmkRwncB4byPKWzyD2ShVjllVBIvZ0KHhcdc_1QuVtwAOUI34V3U_GywznTWugwocCcT5x3FCBSh8kQtYUtqfyO_7gnHxJuHrD4Sj3Dx",
+  },
+  {
+    id: "missha-tint",
+    title: "미샤 컬러 립 틴트, 딥 레드, 1개",
+    price: "3,900원",
+    priceValue: 3900,
+    shipping: { text: "일반배송" },
+    rating: 3,
+    reviewCount: "740",
+    trust: { tone: "warn", score: 1.5 },
+    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCcoT9JpvMjRGhqvrU3oC3uXLu8vdc8pSXbJCMD4N8_VI9xu6RSj7q40gusF626Wt8pT3iUwVHAJjOp3IEP-djvo3-0OtV3uWJAfRG8le1M86sHc_asSrE8cXp1dVupWJPtEyCOz2oGmfE_DdX5zW7VDkIN3dZQD-nF9s3Zy2bcjd5dNbzGcxehR3orkZRVP0l62NeNEgzwlt7itBAWPMN1KVdyc1VaYPAyW3G42a25t3GiWJsnvnmy",
+    contain: true,
   },
 ];
 
@@ -89,10 +136,24 @@ const TRUST_STYLE: Record<string, string> = {
   warn: "bg-error/10 text-error border-error/20",
 };
 
+const SORT_CHIPS: { key: SortKey; label: string }[] = [
+  { key: "trust", label: "안심 평점순" },
+  { key: "price", label: "가격순" },
+  { key: "rating", label: "별점순" },
+];
+
 export default function SearchResults() {
   const navigate = useNavigate();
   const [query, setQuery] = useState("틴트");
-  const [includeShipping, setIncludeShipping] = useState(false);
+  const [sortKey, setSortKey] = useState<SortKey>("trust");
+
+  const sortedProducts = useMemo(() => {
+    const list = [...PRODUCTS];
+    if (sortKey === "trust") list.sort((a, b) => b.trust.score - a.trust.score);
+    else if (sortKey === "price") list.sort((a, b) => a.priceValue - b.priceValue);
+    else list.sort((a, b) => b.rating - a.rating);
+    return list;
+  }, [sortKey]);
 
   return (
     <div className="bg-surface-bright min-h-screen flex flex-col pb-20">
@@ -115,17 +176,28 @@ export default function SearchResults() {
               <Icon name="cancel" className="text-xl" />
             </button>
           </div>
-          <Icon name="notifications" className="text-on-surface-variant text-2xl" />
         </div>
 
         <div className="px-container-margin pb-3 overflow-x-auto scrollbar-hide flex items-center gap-2">
           <button className="flex items-center justify-center min-w-[36px] h-[36px] rounded-full border border-border-gray bg-surface-container-lowest text-text-primary shrink-0">
             <Icon name="tune" className="text-xl" />
           </button>
-          <button className="flex items-center h-[36px] px-3 rounded-full border-2 border-primary-container bg-primary-fixed-dim text-rocket-navy font-body-md-bold shrink-0 gap-1.5 shadow-sm">
-            <Icon name="verified" filled className="text-[16px] text-delivery-green" />
-            안심 평점순
-          </button>
+          {SORT_CHIPS.map((chip) => (
+            <button
+              key={chip.key}
+              onClick={() => setSortKey(chip.key)}
+              className={`flex items-center h-[36px] px-3 rounded-full shrink-0 gap-1.5 ${
+                sortKey === chip.key
+                  ? "border-2 border-primary-container bg-primary-fixed-dim text-rocket-navy font-body-md-bold shadow-sm"
+                  : "border border-border-gray bg-surface-container-lowest text-text-primary text-body-md"
+              }`}
+            >
+              {chip.key === "trust" && (
+                <Icon name="verified" filled className="text-[16px] text-delivery-green" />
+              )}
+              {chip.label}
+            </button>
+          ))}
           <button className="flex items-center h-[36px] px-3 rounded-full border border-border-gray bg-surface-container-lowest text-text-primary text-body-md shrink-0 gap-1">
             <Icon name="rocket_launch" filled className="text-sm text-rocket-navy" />
             로켓
@@ -140,32 +212,10 @@ export default function SearchResults() {
             가격대 <Icon name="expand_more" className="text-sm" />
           </button>
         </div>
-
-        <div className="px-container-margin py-2.5 flex items-center justify-between border-b border-border-gray bg-surface-container-low">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <div className="relative inline-block w-9 h-5 align-middle">
-              <input
-                type="checkbox"
-                className="sr-only peer"
-                checked={includeShipping}
-                onChange={(e) => setIncludeShipping(e.target.checked)}
-              />
-              <div className="w-9 h-5 rounded-full bg-outline-variant peer-checked:bg-primary transition-colors" />
-              <div className="absolute left-0.5 top-0.5 w-4 h-4 rounded-full bg-white transition-transform peer-checked:translate-x-4" />
-            </div>
-            <span className="text-body-md text-text-primary">배송비 포함</span>
-          </label>
-          <div className="flex items-center gap-4">
-            <button className="flex items-center text-text-secondary text-body-md">
-              쿠팡 랭킹순 <Icon name="arrow_drop_down" className="text-sm" />
-            </button>
-            <Icon name="grid_view" filled className="text-outline text-xl" />
-          </div>
-        </div>
       </header>
 
       <main className="flex-1">
-        {PRODUCTS.map((p) => (
+        {sortedProducts.map((p) => (
           <button
             key={p.id}
             onClick={() => navigate(`/product/${p.id}`)}
@@ -177,6 +227,11 @@ export default function SearchResults() {
                 src={p.img}
                 alt={p.title}
               />
+              {p.favorite && (
+                <span className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-white/90 flex items-center justify-center shadow-sm">
+                  <Icon name="favorite_border" className="text-text-secondary text-[16px]" />
+                </span>
+              )}
             </div>
             <div className="flex flex-col flex-1">
               <h3 className="text-body-lg-medium text-text-primary line-clamp-2 leading-snug">
@@ -217,11 +272,9 @@ export default function SearchResults() {
               <div className="mt-1.5 flex items-center gap-1.5">
                 <StarRating rating={p.rating} size={14} />
                 <span className="text-[12px] text-text-secondary">({p.reviewCount})</span>
-                {p.trust && (
-                  <span className={`border rounded px-1 text-[10px] font-bold ${TRUST_STYLE[p.trust.tone]}`}>
-                    {p.trust.label}
-                  </span>
-                )}
+                <span className={`border rounded px-1 text-[10px] font-bold ${TRUST_STYLE[p.trust.tone]}`}>
+                  안심 평점 {p.trust.score.toFixed(1)} / 5.0
+                </span>
               </div>
             </div>
           </button>

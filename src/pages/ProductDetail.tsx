@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Icon from "../components/Icon";
 import StarRating from "../components/StarRating";
@@ -6,12 +6,15 @@ import StarRating from "../components/StarRating";
 interface SellerOffer {
   id: string;
   name: string;
-  badge: string;
+  badge?: string;
   price: string;
+  priceValue: number;
   shipping: string;
   shippingTone: "free" | "paid";
   satisfaction: string;
+  satisfactionValue: number;
   trustScore: string;
+  trustValue: number;
   trustTone: "best" | "good" | "warn";
   current?: boolean;
 }
@@ -22,35 +25,49 @@ const OFFERS: SellerOffer[] = [
     name: "쿠팡(주)",
     badge: "쿠팡 추천",
     price: "13,920원",
+    priceValue: 13920,
     shipping: "+ 무료 배송",
     shippingTone: "free",
     satisfaction: "99.8%",
+    satisfactionValue: 99.8,
     trustScore: "4.9 / 5.0",
+    trustValue: 4.9,
     trustTone: "best",
     current: true,
   },
   {
     id: "beauty-space",
     name: "뷰티스페이스",
-    badge: "새상품",
     price: "13,500원",
+    priceValue: 13500,
     shipping: "+ 배송비 3,000원",
     shippingTone: "paid",
-    satisfaction: "85.0%",
-    trustScore: "4.7 / 5.0",
+    satisfaction: "86.8%",
+    satisfactionValue: 86.8,
+    trustScore: "4.3 / 5.0",
+    trustValue: 4.3,
     trustTone: "good",
   },
   {
     id: "discount-mart",
     name: "할인마트",
-    badge: "새상품",
     price: "12,900원",
+    priceValue: 12900,
     shipping: "+ 배송비 2,500원",
     shippingTone: "paid",
-    satisfaction: "62.4%",
-    trustScore: "주의",
+    satisfaction: "20.8%",
+    satisfactionValue: 20.8,
+    trustScore: "1.0 / 5.0",
+    trustValue: 1.0,
     trustTone: "warn",
   },
+];
+
+const PRODUCT_SPECS = [
+  { label: "브랜드", value: "투크" },
+  { label: "용량", value: "1ml당 2,784원" },
+  { label: "무게", value: "25g" },
+  { label: "제조사", value: "CJ대한통운" },
 ];
 
 export default function ProductDetail() {
@@ -59,16 +76,22 @@ export default function ProductDetail() {
   const [accordionOpen, setAccordionOpen] = useState(true);
   const [sellerSort, setSellerSort] = useState<"rating" | "price" | "trust">("rating");
 
+  const sortedOffers = useMemo(() => {
+    const list = [...OFFERS];
+    if (sellerSort === "price") list.sort((a, b) => a.priceValue - b.priceValue);
+    else if (sellerSort === "trust") list.sort((a, b) => b.trustValue - a.trustValue);
+    else list.sort((a, b) => b.satisfactionValue - a.satisfactionValue);
+    return list;
+  }, [sellerSort]);
+
   return (
     <div className="w-full max-w-[600px] mx-auto bg-surface-container-lowest min-h-screen pb-[120px] shadow-sm relative">
-      <header className="bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center px-container-margin py-stack-md w-full sticky top-0 z-10">
+      <header className="bg-surface-container-lowest border-b border-outline-variant flex items-center px-container-margin py-stack-md w-full sticky top-0 z-10">
         <button className="text-primary active:opacity-70" onClick={() => navigate(-1)}>
           <Icon name="arrow_back" />
         </button>
-        <h1 className="text-headline-sm-mobile text-primary italic font-black">Coupang</h1>
-        <button className="text-on-surface-variant active:opacity-70">
-          <Icon name="notifications" />
-        </button>
+        <h1 className="flex-1 text-center text-headline-sm-mobile text-primary italic font-black">Coupang</h1>
+        <div className="w-6" />
       </header>
 
       <section className="bg-surface-container-lowest border-b border-surface-container-high pb-4">
@@ -143,20 +166,22 @@ export default function ProductDetail() {
             </div>
 
             <div className="flex flex-col px-container-margin gap-stack-lg">
-              {OFFERS.map((offer) => (
+              {sortedOffers.map((offer) => (
                 <div
                   key={offer.id}
                   className={`rounded-lg border p-4 relative shadow-sm flex items-center justify-between gap-4 ${
                     offer.current ? "border-2 border-primary-container" : "border-border-gray"
                   } ${offer.trustTone === "warn" ? "opacity-80" : ""}`}
                 >
-                  <div
-                    className={`absolute -top-3 left-4 font-label-xs px-2 py-1 rounded-sm ${
-                      offer.current ? "bg-primary text-white" : "bg-surface-container-high text-text-secondary"
-                    }`}
-                  >
-                    {offer.badge}
-                  </div>
+                  {offer.badge && (
+                    <div
+                      className={`absolute -top-3 left-4 font-label-xs px-2 py-1 rounded-sm ${
+                        offer.current ? "bg-primary text-white" : "bg-surface-container-high text-text-secondary"
+                      }`}
+                    >
+                      {offer.badge}
+                    </div>
+                  )}
                   <div className="flex-1">
                     <div className="text-text-primary text-[20px] font-body-lg-bold">{offer.price}</div>
                     <div className={`font-label-sm mt-1 ${offer.shippingTone === "free" ? "text-delivery-green" : "text-text-secondary"}`}>
@@ -202,6 +227,23 @@ export default function ProductDetail() {
             </div>
           </div>
         )}
+      </section>
+
+      <div className="h-2 bg-surface-container-low w-full border-t border-b border-border-gray" />
+
+      <section className="py-4 px-container-margin">
+        <h3 className="text-body-lg-bold text-text-primary mb-2">상품정보</h3>
+        <div className="rounded-lg border border-border-gray overflow-hidden">
+          {PRODUCT_SPECS.map((spec, i) => (
+            <div
+              key={spec.label}
+              className={`flex px-4 py-2.5 ${i > 0 ? "border-t border-border-gray" : ""}`}
+            >
+              <span className="w-24 shrink-0 text-body-md text-text-secondary">{spec.label}</span>
+              <span className="text-body-md text-text-primary">{spec.value}</span>
+            </div>
+          ))}
+        </div>
       </section>
 
       <div className="fixed bottom-0 left-0 w-full md:w-[600px] md:left-1/2 md:-translate-x-1/2 bg-surface-container-lowest border-t border-border-gray p-4 flex gap-2 z-50">
