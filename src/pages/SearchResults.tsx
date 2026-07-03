@@ -159,12 +159,12 @@ export default function SearchResults() {
     <div className="bg-surface-bright min-h-screen flex flex-col pb-20">
       <header className="bg-surface-container-lowest sticky top-0 z-40 shadow-sm">
         <div className="flex items-center px-container-margin py-stack-md w-full gap-3">
-          <button className="text-primary active:opacity-70" onClick={() => navigate(-1)}>
-            <Icon name="arrow_back" className="text-2xl" />
+          <button className="text-text-primary active:opacity-70" onClick={() => navigate(-1)}>
+            <Icon name="arrow_back_ios" className="text-2xl" />
           </button>
           <div className="flex-1 relative">
             <input
-              className="w-full h-10 pl-4 pr-10 border-2 border-primary-container rounded-full text-body-lg-medium text-text-primary focus:outline-none"
+              className="w-full h-10 pl-4 pr-10 border-2 border-text-primary rounded-full text-body-lg-medium text-text-primary focus:outline-none"
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}

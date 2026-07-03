@@ -5,15 +5,16 @@ const NAV_ITEMS = [
   { key: "home", Icon: HomeNavIcon, to: "/", label: "Home" },
   { key: "category", Icon: CategoryNavIcon, to: "/", label: "Category" },
   { key: "search", Icon: SearchNavIcon, to: "/search", label: "Search" },
-  { key: "my", Icon: PersonNavIcon, to: "/", label: "My" },
+  { key: "my", Icon: PersonNavIcon, to: "/mypage", label: "My" },
   { key: "cart", Icon: CartNavIcon, to: "/", label: "Cart", badge: "10" },
 ];
 
-// Only routes that actually exist claim a tab; placeholder tabs (category/my/cart)
+// Only routes that actually exist claim a tab; placeholder tabs (category/cart)
 // share "/" as a stand-in link but must never appear active.
 const ACTIVE_KEY_BY_PATH: Record<string, string> = {
   "/": "home",
   "/search": "search",
+  "/mypage": "my",
 };
 
 export default function BottomNavBar() {

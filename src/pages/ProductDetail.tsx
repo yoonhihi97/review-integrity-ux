@@ -87,11 +87,9 @@ export default function ProductDetail() {
   return (
     <div className="w-full max-w-[600px] mx-auto bg-surface-container-lowest min-h-screen pb-[120px] shadow-sm relative">
       <header className="bg-surface-container-lowest border-b border-outline-variant flex items-center px-container-margin py-stack-md w-full sticky top-0 z-10">
-        <button className="text-primary active:opacity-70" onClick={() => navigate(-1)}>
-          <Icon name="arrow_back" />
+        <button className="text-text-primary active:opacity-70" onClick={() => navigate(-1)}>
+          <Icon name="arrow_back_ios" />
         </button>
-        <h1 className="flex-1 text-center text-headline-sm-mobile text-primary italic font-black">Coupang</h1>
-        <div className="w-6" />
       </header>
 
       <section className="bg-surface-container-lowest border-b border-surface-container-high pb-4">

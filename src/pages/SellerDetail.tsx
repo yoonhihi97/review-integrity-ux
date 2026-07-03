@@ -19,19 +19,11 @@ export default function SellerDetail() {
 
   return (
     <div className="bg-background text-text-primary pb-24">
-      <header className="bg-surface sticky top-0 z-50 flex justify-between items-center w-full px-margin-mobile h-14 border-b border-border-gray">
-        <button className="text-on-surface-variant hover:bg-surface-container p-2 rounded-full" onClick={() => navigate(-1)}>
-          <Icon name="arrow_back" />
+      <header className="bg-surface sticky top-0 z-50 flex items-center w-full px-margin-mobile h-14 border-b border-border-gray">
+        <button className="text-text-primary mr-2" onClick={() => navigate(-1)}>
+          <Icon name="arrow_back_ios" />
         </button>
-        <h1 className="text-primary font-bold">Coupang</h1>
-        <div className="flex items-center space-x-2">
-          <button className="text-on-surface-variant hover:bg-surface-container p-2 rounded-full">
-            <Icon name="search" />
-          </button>
-          <button className="text-on-surface-variant hover:bg-surface-container p-2 rounded-full">
-            <Icon name="notifications" />
-          </button>
-        </div>
+        <h1 className="text-headline-sm-mobile text-text-primary">판매자 정보 상세</h1>
       </header>
 
       <main className="max-w-[1200px] mx-auto md:px-margin-mobile md:py-section-gap">
@@ -75,20 +67,8 @@ export default function SellerDetail() {
         </nav>
 
         <section className="bg-surface-container-lowest pt-section-gap pb-container-margin md:rounded-b-lg">
-          <div className="px-container-margin mb-section-gap flex flex-col md:flex-row gap-gutter">
-            <div className="flex-1 bg-surface-container-low p-container-margin rounded-lg border border-border-gray flex flex-col justify-center">
-              <div className="flex items-center mb-stack-sm">
-                <Icon name="storefront" className="text-outline mr-2 text-[24px]" />
-                <h3 className="text-body-lg-bold">주식회사 진지상회</h3>
-              </div>
-              <div className="flex items-center text-text-secondary text-body-md">
-                <Icon name="thumb_up" className="text-[16px] mr-1" />
-                <span className="mr-2">고객만족도</span>
-                <span className="font-body-md-bold text-text-primary mr-1">99%</span>
-              </div>
-              <p className="text-label-sm text-outline ml-6 mt-1">(9,999+건 평가)</p>
-            </div>
-            <div className="flex-1 bg-surface-container-low p-container-margin rounded-lg border border-border-gray flex flex-col justify-center">
+          <div className="px-container-margin mb-section-gap">
+            <div className="bg-surface-container-low p-container-margin rounded-lg border border-border-gray">
               <div className="flex items-center mb-stack-sm">
                 <Icon name="verified_user" filled className="text-delivery-green mr-2 text-[24px]" />
                 <h3 className="text-body-lg-bold text-delivery-green">안심평가</h3>
@@ -134,8 +114,8 @@ export default function SellerDetail() {
               >
                 {sortBy} <Icon name="expand_more" className="text-[16px] ml-1" />
               </button>
-              <div className="flex items-center cursor-pointer text-body-md text-text-secondary">
-                <Icon name="tune" className="text-[18px] mr-1" /> 필터링
+              <div className="flex items-center cursor-pointer text-text-secondary">
+                <Icon name="tune" className="text-[18px]" />
               </div>
             </div>
 

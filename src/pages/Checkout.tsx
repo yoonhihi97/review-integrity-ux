@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../components/Icon";
+import StarRating from "../components/StarRating";
+
+const PERFORMANCE_METRICS = [
+  { icon: "local_shipping", label: "정시 배송률", value: "98.2%", pct: 98 },
+  { icon: "support_agent", label: "고객 응대 만족도", value: "95.5%", pct: 95 },
+];
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -11,8 +17,8 @@ export default function Checkout() {
     <div className="bg-[#EAEBED] text-text-primary antialiased min-h-screen relative">
       <div className="fixed inset-0 z-0 opacity-40 pointer-events-none filter blur-[2px] overflow-hidden">
         <header className="bg-surface sticky top-0 z-50 border-b border-border-gray flex justify-between items-center w-full px-4 h-14">
-          <Icon name="arrow_back" className="text-on-surface-variant" />
-          <h1 className="text-[18px] font-bold text-primary">Coupang</h1>
+          <Icon name="arrow_back_ios" className="text-text-primary" />
+          <h1 className="text-[18px] font-bold text-text-primary">Coupang</h1>
           <Icon name="search" className="text-on-surface-variant" />
         </header>
         <main className="flex-grow px-4 py-6 space-y-6">
@@ -28,6 +34,24 @@ export default function Checkout() {
             <div className="text-center">
               <span className="text-[22px] font-extrabold text-on-surface block">Excellent (상)</span>
             </div>
+            <StarRating rating={4.8} size={20} />
+          </section>
+          <section className="bg-white rounded-xl border border-border-gray p-4 space-y-5 shadow-sm">
+            <h3 className="text-[16px] font-bold text-on-surface">Detailed Performance</h3>
+            {PERFORMANCE_METRICS.map((m) => (
+              <div key={m.label}>
+                <div className="flex items-center justify-between text-[14px] text-on-surface">
+                  <span className="flex items-center gap-1.5">
+                    <Icon name={m.icon} className="text-[18px] text-on-surface-variant" />
+                    {m.label}
+                  </span>
+                  <span className="font-bold">{m.value}</span>
+                </div>
+                <div className="mt-1.5 w-full h-1 rounded-full bg-surface-container">
+                  <div className="h-full rounded-full bg-primary" style={{ width: `${m.pct}%` }} />
+                </div>
+              </div>
+            ))}
           </section>
         </main>
       </div>
@@ -126,9 +150,9 @@ export default function Checkout() {
                 <div className="flex items-start">
                   <Icon name="location_on" filled className="text-[20px] text-text-primary mr-2 mt-[2px]" />
                   <div>
-                    <div className="text-body-md-bold text-[16px] mb-1">김진홍</div>
+                    <div className="text-body-md-bold text-[16px] mb-1">홍*동</div>
                     <div className="text-[14px] text-text-secondary mb-2 line-clamp-1">
-                      대구광역시 동구 신암동 1852 동대구 해모로 스퀘...
+                      서울특별시 강동구 고덕로 429 팍스애비뉴 4~5층 (청년취업사관학교 강동 캠퍼스)
                     </div>
                     <div className="text-[15px] text-delivery-green font-medium">내일(금) 7/3 도착</div>
                   </div>

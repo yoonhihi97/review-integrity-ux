@@ -35,12 +35,12 @@ export default function WriteReview() {
           </div>
           <div className="flex gap-3 mb-section-gap">
             <img
-              alt="헤이오트 카카오프렌즈 현미누룽지 오트밀"
+              alt="투크 윗아웃 미러 립 틴트"
               className="w-20 h-20 object-cover rounded-lg bg-surface-container-low"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTfyJboZd-qta_wOpLXcmKM5--KGhYHOiilaDw7U-Mb1f5cFt6sW6UiwFr82aE6jnDWwVHioFJAIzs7Kk86DWVqUZbDVMm_sNAEyhHPeELHCPWDhTzNvPa6CmekwKkpGb_m2rdbU4TRHosZWlZdF71CQdIVmkV0DcC0bjjPz1sW3oNBSrfbAxZI7y4K5rXMuXcopaoXTwTL5iDfuC0G7Gr1SMG7KKzGcXinvuTGE45gTcZDttZtrXI"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTxxwRs_sHEiBbLVLmemlmofiX5f98SSQfhnJ68QkicKWZgR_L4zzXw21hTE0YUbrc-EhPR1jTgDB6kDzGRmxK2XadfDiR4vOixq85W3XJNejNA3j39wSf3jaDm8IzSk9Nr4y8AokA_x9kEmkRwncB4byPKWzyD2ShVjllVBIvZ0KHhcdc_1QuVtwAOUI34V3U_GywznTWugwocCcT5x3FCBSh8kQtYUtqfyO_7gnHxJuHrD4Sj3Dx"
             />
             <p className="text-body-md-bold text-text-primary flex-1">
-              헤이오트 카카오프렌즈 현미누룽지 오트밀 20p, 640g, 4개
+              투크 윗아웃 미러 립 틴트, 02 겟 러브, 1개
             </p>
           </div>
           <div className="mb-section-gap">
@@ -55,10 +55,10 @@ export default function WriteReview() {
             <p className="text-body-md">이 상품을 상세히 평가해주세요.</p>
           </div>
           <div className="mb-section-gap">
-            <p className="text-body-lg-bold mb-stack-lg">직접 드셔보니 맛은 어땠나요?</p>
+            <p className="text-body-lg-bold mb-stack-lg">발라보니 발색은 어땠나요?</p>
             <div className="flex flex-col gap-4">
               {[
-                { value: "good", label: "맛있어요" },
+                { value: "good", label: "발색이 예뻐요" },
                 { value: "normal", label: "보통이예요" },
                 { value: "bad", label: "생각보다 별로예요" },
               ].map((opt) => (
@@ -99,7 +99,7 @@ export default function WriteReview() {
           </div>
           <div className="flex items-center gap-2 mb-stack-md text-text-secondary">
             <Icon name="storefront" filled className="text-[20px]" />
-            <span className="text-body-lg-bold text-text-primary">젤리뽀</span>
+            <span className="text-body-lg-bold text-text-primary">주식회사 뉴뷰티</span>
           </div>
           <p className="text-body-lg-bold mb-stack-lg leading-snug">
             배송, 포장, 질문 응대, 상품 가격 등 판매자에 대한 만족도는 어떠셨나요?

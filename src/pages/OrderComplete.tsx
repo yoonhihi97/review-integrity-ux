@@ -58,12 +58,12 @@ export default function OrderComplete() {
           <div className="p-4 space-y-3">
             <div className="flex">
               <span className="w-20 text-gray-500 text-sm">받는사람</span>
-              <span className="text-sm font-medium">김*수 / 010****4952</span>
+              <span className="text-sm font-medium">홍*동 / 010-****-1234</span>
             </div>
             <div className="flex items-start">
               <span className="w-20 text-gray-500 text-sm mt-0.5">받는주소</span>
               <div className="flex-1 text-sm text-gray-700 pr-2">
-                서울특별시 마포구 성산동 ***-* 마포상암시티프라디움리버 ****호
+                서울특별시 강동구 고덕로 429 팍스애비뉴 4~5층 (청년취업사관학교 강동 캠퍼스)
               </div>
               <button className="text-blue-500 text-sm whitespace-nowrap flex items-center">
                 변경하기 <Icon name="chevron_right" className="text-base" />
