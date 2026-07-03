@@ -76,12 +76,12 @@ export default function Checkout() {
             <div className="bg-surface-container-lowest mx-2 mt-4 rounded-xl shadow-sm overflow-hidden pb-4">
               <div className="p-4 border-b border-border-gray/50">
                 <h3 className="text-[15px] leading-tight text-text-primary mb-3 font-body-md-bold">
-                  [FRIN] 한 장이면 충분한 프린 스파이시 키친타월 (고평량 207매 더마테스트 인증), 1개, 828매
+                  투크 윗아웃 미러 립 틴트, 02 겟 러브, 1개
                 </h3>
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center space-x-1 mb-1">
-                      <span className="text-body-lg-bold text-[18px]">18,900원</span>
+                      <span className="text-body-lg-bold text-[18px]">13,920원</span>
                       <span className="text-[12px] font-bold text-discount-orange italic flex items-center">
                         <Icon name="rocket_launch" className="text-[14px] mr-[2px]" />
                         판매자로켓
@@ -92,7 +92,7 @@ export default function Checkout() {
                     </div>
                     <div className="flex items-center space-x-1">
                       <span className="text-[16px] text-tertiary-container font-body-lg-bold">
-                        17,950<span className="text-[14px] font-medium">원</span>
+                        12,970<span className="text-[14px] font-medium">원</span>
                       </span>
                       <span className="text-[12px] text-tertiary-container">총 결제 금액</span>
                     </div>
@@ -150,9 +150,9 @@ export default function Checkout() {
                 <div className="flex items-start">
                   <Icon name="location_on" filled className="text-[20px] text-text-primary mr-2 mt-[2px]" />
                   <div>
-                    <div className="text-body-md-bold text-[16px] mb-1">홍*동</div>
+                    <div className="text-body-md-bold text-[16px] mb-1">김연수</div>
                     <div className="text-[14px] text-text-secondary mb-2 line-clamp-1">
-                      서울특별시 강동구 고덕로 429 팍스애비뉴 4~5층 (청년취업사관학교 강동 캠퍼스)
+                      서울특별시 새싹로 1길
                     </div>
                     <div className="text-[15px] text-delivery-green font-medium">내일(금) 7/3 도착</div>
                   </div>
@@ -167,7 +167,7 @@ export default function Checkout() {
                   <Icon name="account_balance_wallet" className="text-[20px] text-text-primary mr-2 mt-[2px]" />
                   <div>
                     <div className="text-body-md-bold text-[16px] mb-1">신용/체크카드</div>
-                    <div className="text-[14px] text-text-secondary">와우 카드(KB) / 669*, 일시불</div>
+                    <div className="text-[14px] text-text-secondary">와우 카드(KB) / 123*, 일시불</div>
                   </div>
                 </div>
                 <div className="pl-7 space-y-4 mt-2">

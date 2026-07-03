@@ -58,12 +58,12 @@ export default function OrderComplete() {
           <div className="p-4 space-y-3">
             <div className="flex">
               <span className="w-20 text-gray-500 text-sm">받는사람</span>
-              <span className="text-sm font-medium">홍*동 / 010-****-1234</span>
+              <span className="text-sm font-medium">김*수 / 010****1234</span>
             </div>
             <div className="flex items-start">
               <span className="w-20 text-gray-500 text-sm mt-0.5">받는주소</span>
               <div className="flex-1 text-sm text-gray-700 pr-2">
-                서울특별시 강동구 고덕로 429 팍스애비뉴 4~5층 (청년취업사관학교 강동 캠퍼스)
+                서울특별시 새싹로 1길
               </div>
               <button className="text-blue-500 text-sm whitespace-nowrap flex items-center">
                 변경하기 <Icon name="chevron_right" className="text-base" />
@@ -75,7 +75,7 @@ export default function OrderComplete() {
               <div className="text-right">
                 <span className="text-gray-400 text-xs mr-2">쿠팡와우카드(KB국민) / 일시불</span>
                 <span className="text-xl font-bold text-[#e52528]">
-                  20,670 <span className="text-base font-bold">원</span>
+                  12,970 <span className="text-base font-bold">원</span>
                 </span>
               </div>
             </div>
@@ -101,7 +101,7 @@ export default function OrderComplete() {
             <div>
               와우 카드 혜택 <span className="border border-gray-300 rounded px-1 ml-1 text-gray-600">최대 4%</span>
             </div>
-            <div>ㄴ 와우 카드로 총 24,930 원 적립예정</div>
+            <div>ㄴ 와우 카드로 총 12,970 원 적립예정</div>
           </div>
         </section>
 
