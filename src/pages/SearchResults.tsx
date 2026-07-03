@@ -269,10 +269,12 @@ export default function SearchResults() {
                   )}
                 </div>
               )}
-              <div className="mt-1.5 flex items-center gap-1.5">
-                <StarRating rating={p.rating} size={14} />
-                <span className="text-[12px] text-text-secondary">({p.reviewCount})</span>
-                <span className={`border rounded px-1 text-[10px] font-bold ${TRUST_STYLE[p.trust.tone]}`}>
+              <div className="mt-1.5 flex items-center flex-wrap gap-x-1.5 gap-y-1">
+                <StarRating rating={p.rating} size={14} className="shrink-0" />
+                <span className="text-[12px] text-text-secondary shrink-0 whitespace-nowrap">({p.reviewCount})</span>
+                <span
+                  className={`border rounded px-1 text-[10px] font-bold shrink-0 whitespace-nowrap ${TRUST_STYLE[p.trust.tone]}`}
+                >
                   안심 평점 {p.trust.score.toFixed(1)} / 5.0
                 </span>
               </div>

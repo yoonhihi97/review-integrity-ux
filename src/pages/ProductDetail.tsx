@@ -182,40 +182,40 @@ export default function ProductDetail() {
               {sortedOffers.map((offer) => (
                 <div
                   key={offer.id}
-                  className={`rounded-lg border p-4 relative shadow-sm flex items-center justify-between gap-4 ${
+                  className={`rounded-lg border p-3 relative shadow-sm flex items-center justify-between gap-2 ${
                     offer.current ? "border-2 border-primary-container" : "border-border-gray"
                   } ${offer.trustTone === "warn" ? "opacity-80" : ""}`}
                 >
                   {offer.badge && (
                     <div
-                      className={`absolute -top-3 left-4 font-label-xs px-2 py-1 rounded-sm ${
+                      className={`absolute -top-3 left-3 text-[10px] font-bold px-2 py-1 rounded-sm ${
                         offer.current ? "bg-primary text-white" : "bg-surface-container-high text-text-secondary"
                       }`}
                     >
                       {offer.badge}
                     </div>
                   )}
-                  <div className="flex-1">
-                    <div className="text-text-primary text-[20px] font-body-lg-bold">{offer.price}</div>
-                    <div className={`font-label-sm mt-1 ${offer.shippingTone === "free" ? "text-delivery-green" : "text-text-secondary"}`}>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-text-primary text-[15px] font-bold truncate">{offer.price}</div>
+                    <div className={`text-[11px] mt-0.5 truncate ${offer.shippingTone === "free" ? "text-delivery-green" : "text-text-secondary"}`}>
                       {offer.shipping}
                     </div>
                   </div>
-                  <div className="flex-1 text-center">
-                    <div className="font-body-md-bold text-label-sm">{offer.name}</div>
+                  <div className="flex-1 min-w-0 text-center">
+                    <div className="text-[12px] font-bold truncate">{offer.name}</div>
                     <button
-                      className="text-text-secondary underline mt-1 text-label-xs"
+                      className="text-text-secondary underline mt-0.5 text-[10px]"
                       onClick={() => navigate(`/seller/${offer.id}`)}
                     >
                       자세히 보기
                     </button>
                   </div>
-                  <div className="flex-1 flex flex-col items-end gap-2">
-                    <div className="text-right border-l border-outline-variant pl-2 text-[10px]">
-                      <div className="text-label-xs text-text-secondary">
+                  <div className="flex-1 flex flex-col items-end gap-1.5 min-w-0">
+                    <div className="text-right border-l border-outline-variant pl-2 text-[9px] leading-tight">
+                      <div className="text-text-secondary whitespace-nowrap">
                         고객만족도 : <span className="text-text-primary">{offer.satisfaction}</span>
                       </div>
-                      <div className="text-label-xs text-text-secondary">
+                      <div className="text-text-secondary whitespace-nowrap">
                         안심 평점 :{" "}
                         <span className={offer.trustTone === "warn" ? "text-error" : "text-text-primary"}>
                           {offer.trustScore}
@@ -223,13 +223,13 @@ export default function ProductDetail() {
                       </div>
                     </div>
                     {offer.current ? (
-                      <div className="border border-outline-variant rounded-lg px-3 py-1 flex items-center justify-center gap-1 text-text-secondary font-label-sm whitespace-nowrap min-w-[80px] h-[32px]">
-                        <Icon name="check" className="text-[16px]" /> 현재 적용중
+                      <div className="border border-outline-variant rounded-lg px-2 py-1 flex items-center justify-center gap-1 text-text-secondary text-[10px] whitespace-nowrap min-w-[68px] h-[26px]">
+                        <Icon name="check" className="text-[13px]" /> 현재 적용중
                       </div>
                     ) : (
                       <button
                         onClick={() => navigate(`/product/${offer.id}`)}
-                        className="border-b border-text-primary text-text-primary font-body-md-bold text-label-sm py-1 flex items-center justify-center min-w-[80px] h-[32px]"
+                        className="border-b border-text-primary text-text-primary font-bold text-[10px] py-1 flex items-center justify-center min-w-[68px] h-[26px] whitespace-nowrap"
                       >
                         이 상품 보기
                       </button>
