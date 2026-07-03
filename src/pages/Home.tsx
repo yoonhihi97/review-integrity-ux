@@ -12,17 +12,21 @@ import iconCheckroom from "../assets/icons/checkroom.svg";
 import iconRocketLaunch from "../assets/icons/rocket-launch.svg";
 import iconRocket from "../assets/icons/rocket.svg";
 
-const CATEGORY_ICONS = [
-  { icon: iconShoppingBag, label: "자주산상품", bg: "bg-[#FF8000]/10" },
-  { icon: iconMovie, label: "쿠팡플레이", bg: "bg-[#F3F4F6]", tag: "무료시청" },
-  { icon: iconLeaf, label: "로켓프레시", bg: "bg-[#F0FDF4]" },
-  { icon: iconRestaurant, label: "쿠팡이츠", bg: "bg-[#FFF7ED]", tag: "배달비0원" },
-  { icon: iconRedeem, label: "골드박스", bg: "bg-[#FEFCE8]" },
-  { icon: iconTimer, label: "반짝세일", bg: "bg-[#FEF2F2]", tag: "8시간만" },
-  { icon: iconCheckroom, label: "패션/잡화", bg: "bg-[#EFF6FF]" },
-  { special: "rlux" as const, label: "R.LUX" },
-  { icon: iconRocketLaunch, label: "로켓배송", bg: "bg-[#F0F9FF]" },
-  { icon: iconRocket, label: "로켓직구", bg: "bg-[#FAF5FF]" },
+type CategoryIcon =
+  | { kind: "normal"; icon: string; label: string; bg: string; tag?: string }
+  | { kind: "rlux"; label: string };
+
+const CATEGORY_ICONS: CategoryIcon[] = [
+  { kind: "normal", icon: iconShoppingBag, label: "자주산상품", bg: "bg-[#FF8000]/10" },
+  { kind: "normal", icon: iconMovie, label: "쿠팡플레이", bg: "bg-[#F3F4F6]", tag: "무료시청" },
+  { kind: "normal", icon: iconLeaf, label: "로켓프레시", bg: "bg-[#F0FDF4]" },
+  { kind: "normal", icon: iconRestaurant, label: "쿠팡이츠", bg: "bg-[#FFF7ED]", tag: "배달비0원" },
+  { kind: "normal", icon: iconRedeem, label: "골드박스", bg: "bg-[#FEFCE8]" },
+  { kind: "normal", icon: iconTimer, label: "반짝세일", bg: "bg-[#FEF2F2]", tag: "8시간만" },
+  { kind: "normal", icon: iconCheckroom, label: "패션/잡화", bg: "bg-[#EFF6FF]" },
+  { kind: "rlux", label: "R.LUX" },
+  { kind: "normal", icon: iconRocketLaunch, label: "로켓배송", bg: "bg-[#F0F9FF]" },
+  { kind: "normal", icon: iconRocket, label: "로켓직구", bg: "bg-[#FAF5FF]" },
 ];
 
 const DISCOVERY_PRODUCTS = [
@@ -85,7 +89,7 @@ export default function Home() {
         <section className="bg-surface-container-lowest px-4 pt-6 pb-[25px] grid grid-cols-5 gap-y-6 gap-x-2 border-b border-border-gray">
           {CATEGORY_ICONS.map((c) => (
             <div key={c.label} className="flex flex-col items-center gap-1.5 cursor-pointer">
-              {c.special === "rlux" ? (
+              {c.kind === "rlux" ? (
                 <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center text-white font-bold text-xl">
                   R.
                 </div>
