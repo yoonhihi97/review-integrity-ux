@@ -70,6 +70,21 @@ const PRODUCT_SPECS = [
   { label: "제조사", value: "CJ대한통운" },
 ];
 
+const REVIEW_MEDIA_THUMBS = [
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuAh2tTC4CVDzzUMU9u-DoT6d3keLSnNavuIK_ZWaD5PVmaooyAHqfrJScZKGzl_5RiunzKt4YBqc62MZ30zHhRroh1jqcO2N_ML6GasPQlFI49FioGUjYFaWkxn7yr9zGgn_bg6MyIZyeC8RVs_w4kbTIJIddisxy8EywertC94ad313-5MLyKYZ3uaJC7wWoRsAvvoPER21qYUTCDztjCJEGvLr_zjRdEjLNN6SsdDJqAbGQYn8rb1",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuBl7vMH3ANkw9gpqwq5bdm48KV9nJObqg5RtnYQng0CALvks8xTyK_F82Rtje2dtNidF8foCVvM9V9STajONMf4uzZjDwIziB8bWtSDzGtlEeREtisQRpL_yzV2A5n6MytaiWiXb5MFt2zSYsEONe0nCiVVGle1PWTKSDGFe46LcC3SZ2fA30G5OhIzJSF42h8os01UUry8w4pDB3xJZirTpOssOeiYrhr6XeKMBrGDU23rhLEus_N4",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuCYrT590fWGPIh766MPgJPUaD40uv4DlsjZ_n1XqotlyX7epCE12G-J31jIYwmw1BIldJ9XAV3gauDx_0P9j6C9AKuFZie5XOpqnfrBVVp1YjXKuf4ieCDVvTgW6RXkN3BsQ1eisqQIOlr1FDp6NcIYYt3tK2iybd9VvorNKfdUv88nonfGwx4baLzsvTDhZM_jXMi1LJfShdezi5CaHJefKfFsmkHSPt70uQmoYthCFviMxcT_dGFR",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuBQ6WcjXEgdYChwZEzbFpSsAxaG7GkRg8pF1_3qbxmEliAIqR45u7Hgb1p32aCipGFUpURhFSyxsGmC2w89J-KFYMjR5hKY18mNOMNjGVlCS6amXOP5v70Rb-wHQ3LnQo9LAuavgjc0o_Qq4rWMetVl0SosIaLlVQk-94c_rX-8J-YncfqSknBLChYcXGziRxGg5879QcpF4KINUiuvAT97NrWILzUXZ0p3V6bH2vagWqA0R4_lzXdp",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuAh2tTC4CVDzzUMU9u-DoT6d3keLSnNavuIK_ZWaD5PVmaooyAHqfrJScZKGzl_5RiunzKt4YBqc62MZ30zHhRroh1jqcO2N_ML6GasPQlFI49FioGUjYFaWkxn7yr9zGgn_bg6MyIZyeC8RVs_w4kbTIJIddisxy8EywertC94ad313-5MLyKYZ3uaJC7wWoRsAvvoPER21qYUTCDztjCJEGvLr_zjRdEjLNN6SsdDJqAbGQYn8rb1",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuBl7vMH3ANkw9gpqwq5bdm48KV9nJObqg5RtnYQng0CALvks8xTyK_F82Rtje2dtNidF8foCVvM9V9STajONMf4uzZjDwIziB8bWtSDzGtlEeREtisQRpL_yzV2A5n6MytaiWiXb5MFt2zSYsEONe0nCiVVGle1PWTKSDGFe46LcC3SZ2fA30G5OhIzJSF42h8os01UUry8w4pDB3xJZirTpOssOeiYrhr6XeKMBrGDU23rhLEus_N4",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuCYrT590fWGPIh766MPgJPUaD40uv4DlsjZ_n1XqotlyX7epCE12G-J31jIYwmw1BIldJ9XAV3gauDx_0P9j6C9AKuFZie5XOpqnfrBVVp1YjXKuf4ieCDVvTgW6RXkN3BsQ1eisqQIOlr1FDp6NcIYYt3tK2iybd9VvorNKfdUv88nonfGwx4baLzsvTDhZM_jXMi1LJfShdezi5CaHJefKfFsmkHSPt70uQmoYthCFviMxcT_dGFR",
+];
+
+const REVIEW_STATS_PREVIEW = [
+  { label: "향 만족도", value: "아주만족해요", pct: "59%" },
+  { label: "발색 정도", value: "예상했던 색감이에요", pct: "67%" },
+];
+
 export default function ProductDetail() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -242,6 +257,101 @@ export default function ProductDetail() {
             </div>
           ))}
         </div>
+      </section>
+
+      <div className="h-2 bg-surface-container-low w-full border-t border-b border-border-gray" />
+
+      <section className="py-4">
+        <h3 className="text-body-lg-bold text-text-primary mb-2 px-container-margin">상세정보</h3>
+        <img
+          src="https://thumbnail.coupangcdn.com/thumbnails/remote/q89/image/retail/images/2025/08/04/15/8/3fd8f7e8-eb04-43df-afd3-b778edb1415b.jpg"
+          alt="상품 상세 이미지"
+          className="w-full h-auto"
+        />
+      </section>
+
+      <div className="h-2 bg-surface-container-low w-full border-t border-b border-border-gray" />
+
+      <section className="py-4 px-container-margin">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-body-lg-bold text-text-primary">상품 리뷰</h3>
+          <button
+            className="flex items-center text-primary text-body-md"
+            onClick={() => navigate(`/product/${id ?? "tooc-lip-tint"}/reviews`)}
+          >
+            전체보기 <Icon name="chevron_right" className="text-sm" />
+          </button>
+        </div>
+
+        <p className="text-body-md-bold text-text-primary mb-2">사진/동영상</p>
+        <div className="grid grid-cols-4 gap-1 mb-5">
+          {REVIEW_MEDIA_THUMBS.slice(0, 7).map((src, i) => (
+            <div key={i} className="aspect-square relative bg-surface-container-low rounded overflow-hidden">
+              <img className="w-full h-full object-cover" src={src} alt="리뷰 미디어" />
+              {i === 0 && (
+                <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white text-label-xs">
+                  <Icon name="play_arrow" filled className="mb-0.5" />
+                  0:12
+                </div>
+              )}
+            </div>
+          ))}
+          <button
+            className="aspect-square bg-primary-container/90 rounded flex flex-col items-center justify-center text-white"
+            onClick={() => navigate(`/product/${id ?? "tooc-lip-tint"}/reviews`)}
+          >
+            <span className="text-body-lg-bold">199</span>
+            <span className="text-label-xs">더보기</span>
+          </button>
+        </div>
+
+        <div className="space-y-2 mb-5">
+          {REVIEW_STATS_PREVIEW.map((s) => (
+            <div key={s.label} className="flex items-center justify-between">
+              <span className="text-body-md text-text-secondary">{s.label}</span>
+              <div className="flex items-center gap-2">
+                <span className="text-body-md-bold text-primary">"{s.value}"</span>
+                <span className="text-body-md-bold text-text-primary">{s.pct}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="border border-border-gray rounded-lg p-4">
+          <div className="flex items-center gap-1.5 mb-1">
+            <StarRating rating={5} size={16} />
+            <span className="text-body-md-bold text-text-primary">스**닝</span>
+            <span className="text-label-xs text-text-secondary ml-auto">2026.07.01</span>
+          </div>
+          <p className="text-label-xs text-text-secondary mb-3">판매자: 주식회사 뉴뷰티</p>
+          <p className="text-body-md text-text-primary leading-relaxed mb-3">
+            한줄 요약: 맑고 생기 있는 컬러로 데일리 메이크업에 잘 어울리는 투크 틴트 겟 러브
+          </p>
+          <p className="text-body-md text-text-secondary leading-relaxed mb-3 line-clamp-4">
+            평소 자연스럽고 맑게 발색되는 틴트를 좋아해서 투크 틴트 겟 러브를 구매했습니다. 입술에 얇고 가볍게
+            밀착되면서 여러 번 덧발라도 답답한 느낌이 적었고, 생기 있는 컬러 덕분에 데일리 메이크업에 손이 자주
+            갔습니다.
+          </p>
+          <button
+            className="text-primary text-label-sm mb-3"
+            onClick={() => navigate(`/product/${id ?? "tooc-lip-tint"}/reviews`)}
+          >
+            더보기
+          </button>
+          <div className="flex items-center justify-between text-label-xs text-text-secondary">
+            <button className="flex items-center gap-1">
+              <Icon name="thumb_up" className="text-sm" /> 17명에게 도움이 됐어요
+            </button>
+            <button>신고하기</button>
+          </div>
+        </div>
+
+        <button
+          className="w-full mt-4 h-12 border border-primary text-primary text-body-lg-bold rounded-lg flex items-center justify-center"
+          onClick={() => navigate(`/product/${id ?? "tooc-lip-tint"}/reviews`)}
+        >
+          리뷰 전체보기
+        </button>
       </section>
 
       <div className="fixed bottom-0 left-0 w-full md:w-[600px] md:left-1/2 md:-translate-x-1/2 bg-surface-container-lowest border-t border-border-gray p-4 flex gap-2 z-50">
