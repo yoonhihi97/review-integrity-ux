@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Icon from "../components/Icon";
 import StarRating from "../components/StarRating";
 import BottomNavBar from "../components/BottomNavBar";
@@ -144,7 +144,8 @@ const SORT_CHIPS: { key: SortKey; label: string }[] = [
 
 export default function SearchResults() {
   const navigate = useNavigate();
-  const [query, setQuery] = useState("틴트");
+  const [searchParams] = useSearchParams();
+  const [query, setQuery] = useState(() => searchParams.get("q") ?? "");
   const [sortKey, setSortKey] = useState<SortKey>("trust");
 
   const sortedProducts = useMemo(() => {

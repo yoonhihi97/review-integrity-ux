@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../components/Icon";
 import BottomNavBar from "../components/BottomNavBar";
@@ -37,6 +38,12 @@ const DISCOVERY_PRODUCTS = [
 
 export default function Home() {
   const navigate = useNavigate();
+  const [searchInput, setSearchInput] = useState("");
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    navigate(`/search?q=${encodeURIComponent(searchInput.trim())}`);
+  };
 
   return (
     <div className="bg-background pb-20">
@@ -52,17 +59,18 @@ export default function Home() {
             </span>
           </div>
         </div>
-        <button
-          className="relative w-full text-left"
-          onClick={() => navigate("/search")}
-        >
+        <form className="relative w-full" onSubmit={handleSearchSubmit}>
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Icon name="search" className="text-outline" />
           </div>
-          <div className="block w-full pl-10 pr-3 py-2 border-2 border-text-primary rounded-full bg-surface-container-lowest text-text-secondary text-sm">
-            쿠팡에서 검색하세요!
-          </div>
-        </button>
+          <input
+            type="text"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="쿠팡에서 검색하세요!"
+            className="block w-full pl-10 pr-3 py-2 border-2 border-text-primary rounded-full bg-surface-container-lowest text-text-primary text-sm focus:outline-none"
+          />
+        </form>
       </header>
 
       <main className="max-w-screen-md mx-auto">
