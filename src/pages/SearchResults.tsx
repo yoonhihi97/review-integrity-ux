@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import Icon from "../components/Icon";
 import StarRating from "../components/StarRating";
 import BottomNavBar from "../components/BottomNavBar";
+import TrustInfoSheet from "../components/TrustInfoSheet";
 
 interface Product {
   id: string;
@@ -136,6 +137,12 @@ const TRUST_STYLE: Record<string, string> = {
   warn: "bg-error/10 text-error border-error/20",
 };
 
+const TRUST_TIER_LABEL: Record<string, string> = {
+  best: "안심 최우수",
+  good: "안심 우수",
+  warn: "안심 주의",
+};
+
 const SORT_CHIPS: { key: SortKey; label: string }[] = [
   { key: "trust", label: "안심 평점순" },
   { key: "price", label: "가격순" },
@@ -147,6 +154,7 @@ export default function SearchResults() {
   const [searchParams] = useSearchParams();
   const [query, setQuery] = useState(() => searchParams.get("q") ?? "");
   const [sortKey, setSortKey] = useState<SortKey>("trust");
+  const [trustInfoOpen, setTrustInfoOpen] = useState(false);
 
   const sortedProducts = useMemo(() => {
     const list = [...PRODUCTS];
@@ -213,6 +221,14 @@ export default function SearchResults() {
             가격대 <Icon name="expand_more" className="text-sm" />
           </button>
         </div>
+
+        <button
+          onClick={() => setTrustInfoOpen(true)}
+          className="w-full flex items-center justify-center gap-1 py-2 border-t border-border-gray bg-surface-container-low text-body-md-bold text-primary"
+        >
+          <Icon name="help" className="text-[18px]" />
+          안심 평점에 대해 궁금하신가요?
+        </button>
       </header>
 
       <main className="flex-1">
@@ -276,13 +292,15 @@ export default function SearchResults() {
                 <span
                   className={`border rounded px-1 text-[10px] font-bold shrink-0 whitespace-nowrap ${TRUST_STYLE[p.trust.tone]}`}
                 >
-                  안심 평점 {p.trust.score.toFixed(1)} / 5.0
+                  {TRUST_TIER_LABEL[p.trust.tone]} {p.trust.score.toFixed(1)}/5.0
                 </span>
               </div>
             </div>
           </button>
         ))}
       </main>
+
+      {trustInfoOpen && <TrustInfoSheet onClose={() => setTrustInfoOpen(false)} />}
 
       <BottomNavBar />
     </div>

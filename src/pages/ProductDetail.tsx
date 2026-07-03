@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Icon from "../components/Icon";
 import StarRating from "../components/StarRating";
+import TrustInfoSheet from "../components/TrustInfoSheet";
 
 interface SellerOffer {
   id: string;
@@ -90,6 +91,7 @@ export default function ProductDetail() {
   const { id } = useParams();
   const [accordionOpen, setAccordionOpen] = useState(true);
   const [sellerSort, setSellerSort] = useState<"rating" | "price" | "trust">("rating");
+  const [trustInfoOpen, setTrustInfoOpen] = useState(false);
 
   const sortedOffers = useMemo(() => {
     const list = [...OFFERS];
@@ -100,7 +102,7 @@ export default function ProductDetail() {
   }, [sellerSort]);
 
   return (
-    <div className="w-full max-w-[600px] mx-auto bg-surface-container-lowest min-h-screen pb-[120px] shadow-sm relative">
+    <div className="w-full bg-surface-container-lowest min-h-screen pb-[120px] relative">
       <header className="bg-surface-container-lowest border-b border-outline-variant flex items-center px-container-margin py-stack-md w-full sticky top-0 z-10">
         <button className="text-text-primary active:opacity-70" onClick={() => navigate(-1)}>
           <Icon name="arrow_back_ios" />
@@ -143,18 +145,23 @@ export default function ProductDetail() {
       <div className="h-2 bg-surface-container-low w-full border-t border-b border-border-gray" />
 
       <section className="py-4">
-        <button
-          className="w-full px-container-margin flex justify-between items-center py-4"
-          onClick={() => setAccordionOpen((v) => !v)}
-        >
-          <div className="flex items-center gap-2">
+        <div className="w-full px-container-margin flex justify-between items-center py-4">
+          <button
+            className="flex items-center gap-2 flex-1 text-left"
+            onClick={() => setAccordionOpen((v) => !v)}
+          >
             <h3 className="text-body-lg-bold text-text-primary">다른 판매자 보기 (3)</h3>
-            <span className="text-label-sm text-text-secondary flex items-center">
-              안심 평점 안내 <Icon name="info" className="text-[16px] ml-1" />
-            </span>
-          </div>
-          <Icon name="expand_more" className={`text-text-secondary transition-transform ${accordionOpen ? "rotate-180" : ""}`} />
-        </button>
+          </button>
+          <button
+            className="text-label-sm text-primary font-body-md-bold flex items-center shrink-0"
+            onClick={() => setTrustInfoOpen(true)}
+          >
+            안심 평점 안내 <Icon name="info" className="text-[16px] ml-1" />
+          </button>
+          <button className="ml-2" onClick={() => setAccordionOpen((v) => !v)}>
+            <Icon name="expand_more" className={`text-text-secondary transition-transform ${accordionOpen ? "rotate-180" : ""}`} />
+          </button>
+        </div>
 
         {accordionOpen && (
           <div>
@@ -204,10 +211,10 @@ export default function ProductDetail() {
                   <div className="flex-1 min-w-0 text-center">
                     <div className="text-[12px] font-bold truncate">{offer.name}</div>
                     <button
-                      className="text-text-secondary underline mt-0.5 text-[10px]"
+                      className="text-primary font-bold mt-0.5 text-[11px] flex items-center justify-center gap-0.5 mx-auto"
                       onClick={() => navigate(`/seller/${offer.id}`)}
                     >
-                      자세히 보기
+                      판매자 정보 보기 <Icon name="chevron_right" className="text-[12px]" />
                     </button>
                   </div>
                   <div className="flex-1 flex flex-col items-end gap-1.5 min-w-0">
@@ -354,7 +361,7 @@ export default function ProductDetail() {
         </button>
       </section>
 
-      <div className="fixed bottom-0 left-0 w-full md:w-[600px] md:left-1/2 md:-translate-x-1/2 bg-surface-container-lowest border-t border-border-gray p-4 flex gap-2 z-50">
+      <div className="fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-border-gray p-4 flex gap-2 z-50">
         <button className="flex-1 bg-surface-container text-text-primary text-body-lg-bold py-3 rounded-lg border border-border-gray flex justify-center items-center gap-1">
           장바구니 담기
         </button>
@@ -365,6 +372,8 @@ export default function ProductDetail() {
           바로구매
         </button>
       </div>
+
+      {trustInfoOpen && <TrustInfoSheet onClose={() => setTrustInfoOpen(false)} />}
     </div>
   );
 }

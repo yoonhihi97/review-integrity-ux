@@ -8,6 +8,20 @@ const REVIEWS = [
   { name: "김*빈", date: "2026.06.30", rating: 5, label: "만족해요", tags: ["합리적인 가격", "빠른 배송"], negative: false },
   { name: "이*민", date: "2026.06.02", rating: 2, label: "불만족해요", tags: ["상품이 잘못왔어요"], negative: true },
   { name: "박*준", date: "2026.05.28", rating: 5, label: "만족해요", tags: ["친절한 상담"], negative: false },
+  { name: "최*영", date: "2026.05.10", rating: 5, label: "만족해요", tags: ["합리적인 가격", "고객응대가 훌륭해요"], negative: false },
+  { name: "정*수", date: "2026.04.22", rating: 4, label: "만족해요", tags: ["빠른 배송"], negative: false },
+  { name: "한*나", date: "2026.03.15", rating: 1, label: "불만족해요", tags: ["불량품이 많아요"], negative: true },
+];
+
+const POSITIVE_TAGS = [
+  { label: "합리적인 가격", count: 900 },
+  { label: "빠른 배송", count: 956 },
+  { label: "고객응대가 훌륭해요", count: 801 },
+];
+
+const NEGATIVE_TAGS = [
+  { label: "불량품이 많아요", count: 750 },
+  { label: "원하는 제품이 아니었어요", count: 89 },
 ];
 
 const TABS = ["홈", "전체 상품", "판매자 후기"];
@@ -16,6 +30,14 @@ export default function SellerDetail() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("판매자 후기");
   const [sortBy, setSortBy] = useState("최신순");
+  const [activeTags, setActiveTags] = useState<string[]>([]);
+
+  const toggleTag = (tag: string) => {
+    setActiveTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
+  };
+
+  const filteredReviews =
+    activeTags.length === 0 ? REVIEWS : REVIEWS.filter((r) => r.tags.some((tag) => activeTags.includes(tag)));
 
   return (
     <div className="bg-background text-text-primary pb-24">
@@ -83,28 +105,59 @@ export default function SellerDetail() {
           <div className="w-full h-[8px] bg-surface-container" />
 
           <div className="p-container-margin">
-            <h3 className="text-headline-sm-mobile mb-stack-md">구매 고객의 상점리뷰 (9,999+건)</h3>
+            <h3 className="text-headline-sm-mobile mb-1">구매 고객의 상점리뷰 (9,999+건)</h3>
+            <p className="text-label-sm text-text-secondary mb-stack-md">
+              고객이 가장 많이 언급한 키워드예요 · 눌러서 관련 리뷰만 모아볼 수 있어요
+            </p>
             <div className="flex flex-col gap-2 mb-stack-lg">
               <div className="flex items-start">
                 <span className="text-body-md text-text-secondary w-24 shrink-0 mt-1">이런점이 좋아요</span>
                 <div className="flex flex-wrap gap-2">
-                  {["합리적인 가격 (900)", "빠른 배송 (956)", "고객응대가 훌륭해요 (801)"].map((t) => (
-                    <span key={t} className="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-container-low border border-border-gray text-body-md text-text-primary">
-                      <Icon name="check" className="text-primary text-[14px] mr-1 font-bold" /> {t}
-                    </span>
+                  {POSITIVE_TAGS.map((t) => (
+                    <button
+                      key={t.label}
+                      onClick={() => toggleTag(t.label)}
+                      className={`inline-flex items-center px-3 py-1.5 rounded-full border text-body-md transition-colors ${
+                        activeTags.includes(t.label)
+                          ? "bg-primary border-primary text-white"
+                          : "bg-surface-container-low border-border-gray text-text-primary"
+                      }`}
+                    >
+                      <Icon
+                        name="check"
+                        className={`text-[14px] mr-1 font-bold ${activeTags.includes(t.label) ? "text-white" : "text-primary"}`}
+                      />
+                      {t.label} ({t.count})
+                    </button>
                   ))}
                 </div>
               </div>
               <div className="flex items-start mt-2">
                 <span className="text-body-md text-text-secondary w-24 shrink-0 mt-1">이런점이 아쉬워요</span>
                 <div className="flex flex-wrap gap-2">
-                  {["불량품이 많아요 (750)", "원하는 제품이 아니었어요 (89)"].map((t) => (
-                    <span key={t} className="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-container-low border border-border-gray text-body-md text-error">
-                      {t}
-                    </span>
+                  {NEGATIVE_TAGS.map((t) => (
+                    <button
+                      key={t.label}
+                      onClick={() => toggleTag(t.label)}
+                      className={`inline-flex items-center px-3 py-1.5 rounded-full border text-body-md transition-colors ${
+                        activeTags.includes(t.label)
+                          ? "bg-error border-error text-white"
+                          : "bg-surface-container-low border-border-gray text-error"
+                      }`}
+                    >
+                      {t.label} ({t.count})
+                    </button>
                   ))}
                 </div>
               </div>
+              {activeTags.length > 0 && (
+                <button
+                  onClick={() => setActiveTags([])}
+                  className="self-start text-label-sm text-text-secondary underline mt-1"
+                >
+                  필터 초기화
+                </button>
+              )}
             </div>
 
             <div className="flex justify-between items-center py-3 border-t border-b border-border-gray mb-stack-lg">
@@ -119,8 +172,13 @@ export default function SellerDetail() {
               </div>
             </div>
 
+            {filteredReviews.length === 0 && (
+              <div className="py-10 text-center text-text-secondary text-body-md">
+                선택한 키워드에 해당하는 리뷰가 없습니다.
+              </div>
+            )}
             <div className="space-y-section-gap">
-              {REVIEWS.map((r) => (
+              {filteredReviews.map((r) => (
                 <div key={r.name + r.date} className="border-b border-surface-container pb-section-gap">
                   <div className="flex items-center justify-between mb-stack-sm">
                     <div className="flex items-center gap-2">

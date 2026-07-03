@@ -418,11 +418,11 @@ export default function ReviewExplore() {
           </label>
         </div>
         {!sellerOnly && (
-          <div className="bg-tertiary-fixed text-on-tertiary-fixed text-sm px-container-margin py-3 flex items-start gap-2 border-t border-b border-tertiary-fixed-dim">
-            <Icon name="warning" className="text-tertiary shrink-0" />
-            <p className="leading-tight">
-              현재 판매자가 아닌 다른 판매자들의 리뷰가 포함되어 있습니다.
-              판매자별 배송/포장 품질이 다를 수 있으니 주의하세요.
+          <div className="bg-rating-gold/15 text-text-primary text-sm px-container-margin py-3 flex items-start gap-2 border-t border-b-2 border-rating-gold">
+            <Icon name="warning" filled className="text-rating-gold shrink-0 text-xl" />
+            <p className="leading-snug">
+              <span className="font-bold">다른 판매자의 리뷰도 함께 보고 있어요.</span> 판매자별로 배송·포장·품질이
+              다를 수 있으니 구매 전 꼭 확인하세요.
             </p>
           </div>
         )}
