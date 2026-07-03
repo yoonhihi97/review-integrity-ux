@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.material-symbols-outlined.fill {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  background-color: #f8f9fa;
+  min-height: max(884px, 100dvh);
+  -webkit-font-smoothing: antialiased;
+}
+
+input[type="radio"].radio-primary {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid #c3c5d9;
+  border-radius: 50%;
+  margin-right: 8px;
+  display: inline-grid;
+  place-content: center;
+}
+input[type="radio"].radio-primary::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  background-color: #0f4fff;
+}
+input[type="radio"].radio-primary:checked {
+  border-color: #0f4fff;
+}
+input[type="radio"].radio-primary:checked::before {
+  transform: scale(1);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.slide-in-right {
+  animation: slideInRight 0.25s ease-out forwards;
+}
