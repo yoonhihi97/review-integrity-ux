@@ -4,6 +4,12 @@ const DEVICE_WIDTH = 390;
 const DEVICE_HEIGHT = 884;
 const DESKTOP_BREAKPOINT = 900;
 
+const PAD_X = 14;
+const PAD_TOP = 14;
+const PAD_BOTTOM = 14;
+const FRAME_WIDTH = DEVICE_WIDTH + PAD_X * 2;
+const FRAME_HEIGHT = DEVICE_HEIGHT + PAD_TOP + PAD_BOTTOM;
+
 function isInIframe() {
   try {
     return window.self !== window.top;
@@ -28,15 +34,21 @@ export default function PhoneMockup({ children }: { children: ReactNode }) {
   if (!showMockup) return <>{children}</>;
 
   return (
-    <div className="h-[100dvh] w-full flex items-center justify-center bg-[#1a1a1a] overflow-hidden">
+    <div className="h-[100dvh] w-full flex items-center justify-center bg-gradient-to-b from-[#eef0f3] to-[#dde1e6] overflow-hidden">
       <div
-        className="relative bg-black rounded-[48px] p-[14px] shadow-2xl box-border"
+        className="relative bg-gradient-to-b from-[#2b2d33] to-[#0b0c0f] rounded-[48px] shadow-2xl box-border ring-1 ring-white/10"
         style={{
-          height: `min(${DEVICE_HEIGHT + 28}px, calc(100dvh - 48px))`,
-          aspectRatio: `${DEVICE_WIDTH + 28} / ${DEVICE_HEIGHT + 28}`,
+          height: `min(${FRAME_HEIGHT}px, calc(100dvh - 48px))`,
+          aspectRatio: `${FRAME_WIDTH} / ${FRAME_HEIGHT}`,
+          padding: `${PAD_TOP}px ${PAD_X}px ${PAD_BOTTOM}px`,
         }}
       >
-        <div className="absolute top-[1.5%] left-1/2 -translate-x-1/2 w-[30%] h-[3%] bg-black rounded-b-2xl z-10" />
+        {/* side buttons */}
+        <div className="absolute left-[-2px] top-[110px] w-[2px] h-[28px] bg-[#0b0c0f] rounded-l-sm" />
+        <div className="absolute left-[-2px] top-[150px] w-[2px] h-[46px] bg-[#0b0c0f] rounded-l-sm" />
+        <div className="absolute left-[-2px] top-[204px] w-[2px] h-[46px] bg-[#0b0c0f] rounded-l-sm" />
+        <div className="absolute right-[-2px] top-[160px] w-[2px] h-[64px] bg-[#0b0c0f] rounded-r-sm" />
+
         <div className="relative bg-white rounded-[36px] overflow-hidden w-full h-full">
           <iframe
             src={window.location.href}
